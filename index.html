@@ -5,131 +5,64 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MAIE LADUGA Gaming</title>
 <link rel="stylesheet" href="style.css">
-
-<style>
-.tournament-info {
-    background: #171717;
-    border: 1px solid #ff3030;
-    border-radius: 12px;
-    padding: 20px;
-    max-width: 600px;
-    margin: 20px auto;
-    text-align: center;
-}
-
-.tournament-info p {
-    margin: 14px 0;
-}
-
-.tournament-info strong {
-    color: #ff4545;
-}
-
-.tournament-info button {
-    background: #e52222;
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-</style>
 </head>
-
 <body>
 
 <header>
     <h1>MAIE LADUGA</h1>
-    <p>THE ULTIMATE GAMING ZONE</p>
-
+    <p>OFFICIAL GAMING WEBSITE</p>
     <nav>
-        <a href="#home">HOME</a>
-        <a href="#games">GAMES</a>
-        <a href="#tournaments">TOURNAMENTS</a>
-        <a href="#register">REGISTER</a>
-        <a href="#contact">CONTACT</a>
+        <a href="#home">Home</a>
+        <a href="#games">Games</a>
+        <a href="#tournament">Tournament</a>
+        <a href="#register">Register</a>
+        <a href="#contact">Contact</a>
     </nav>
 </header>
 
-<section id="home" class="hero">
-    <h2>WELCOME TO MAIE LADUGA</h2>
-    <p>Play. Compete. Become a Champion.</p>
-    <a href="#register" class="btn">JOIN TOURNAMENT</a>
+<section id="home" class="banner">
+    <img src="banner.png" alt="MAIE LADUGA Gaming Banner">
 </section>
 
 <section id="games">
     <h2>OUR GAMES</h2>
-
     <div class="cards">
         <div class="card">
             <h3>FREE FIRE</h3>
             <p>Battle Royale Gaming</p>
         </div>
-
         <div class="card">
-            <h3>BATTLEGROUNDS</h3>
-            <p>Survival Battle Gaming</p>
+            <h3>BGMI</h3>
+            <p>Squad Battle Gaming</p>
         </div>
     </div>
 </section>
 
-<section id="tournaments">
+<section id="tournament">
     <h2>UPCOMING TOURNAMENT</h2>
-
-    <div class="tournament-info">
-
-        <h3 id="showName">Tournament Name</h3>
-
-        <p>Entry Fee:
-            <strong id="showFee">Not announced</strong>
-        </p>
-
-        <p>Prize Pool:
-            <strong id="showPrize">Not announced</strong>
-        </p>
-
-        <p>Date:
-            <strong id="showDate">Not announced</strong>
-        </p>
-
-        <button onclick="location.href='#register'">
-            REGISTER NOW
-        </button>
-
+    <div class="card">
+        <h3 id="showName">Tournament details coming soon</h3>
+        <p>Entry Fee: <span id="showFee">-</span></p>
+        <p>Prize Pool: <span id="showPrize">-</span></p>
+        <p>Date: <span id="showDate">-</span></p>
     </div>
 </section>
 
 <section id="register">
     <h2>PLAYER REGISTRATION</h2>
-
-    <form id="registrationForm">
-
-        <input type="text"
-        id="playerName"
-        placeholder="Player Name" required>
-
-        <input type="text"
-        id="playerUID"
-        placeholder="Free Fire UID" required>
-
-        <input type="text"
-        id="teamName"
-        placeholder="Team Name" required>
-
-        <input type="text"
-        id="squadMembers"
-        placeholder="Squad Members" required>
-
+    <form id="registerForm">
+        <input id="name" placeholder="Player Name" required>
+        <input id="uid" placeholder="Free Fire UID" required>
+        <input id="team" placeholder="Team Name" required>
+        <input id="members" placeholder="Squad Members" required>
         <button type="submit">REGISTER NOW</button>
-
     </form>
+    <p id="message"></p>
 </section>
 
 <section id="contact">
     <h2>CONTACT US</h2>
-    <p>MAIE LADUGA Gaming Community</p>
+    <p>Contact: 6204024376</p>
 </section>
 
 <footer>
@@ -137,76 +70,37 @@
 </footer>
 
 <script>
-
-// LOAD TOURNAMENT DETAILS
-
-function loadTournament() {
-
-    let tournament = null;
-
-    try {
-        tournament = JSON.parse(
-            localStorage.getItem("tournament")
-        );
-    } catch(error) {
-        tournament = null;
-    }
-
-    if (!tournament) return;
-
-    document.getElementById("showName").textContent =
-        tournament.name || "Tournament";
-
-    document.getElementById("showFee").textContent =
-        tournament.fee ? "₹" + tournament.fee : "Not announced";
-
-    document.getElementById("showPrize").textContent =
-        tournament.prize ? "₹" + tournament.prize : "Not announced";
-
-    document.getElementById("showDate").textContent =
-        tournament.date || "Not announced";
-}
-
-
-// PLAYER REGISTRATION
-
-document.getElementById("registrationForm")
-.addEventListener("submit", function(event) {
-
-    event.preventDefault();
+document.getElementById("registerForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
     const player = {
-        name: document.getElementById("playerName").value.trim(),
-        uid: document.getElementById("playerUID").value.trim(),
-        team: document.getElementById("teamName").value.trim(),
-        members: document.getElementById("squadMembers").value.trim()
+        name: document.getElementById("name").value,
+        uid: document.getElementById("uid").value,
+        team: document.getElementById("team").value,
+        members: document.getElementById("members").value
     };
 
-    let players = [];
-
-    try {
-        players = JSON.parse(
-            localStorage.getItem("players")
-        ) || [];
-    } catch(error) {
-        players = [];
-    }
-
+    let players = JSON.parse(localStorage.getItem("players") || "[]");
     players.push(player);
+    localStorage.setItem("players", JSON.stringify(players));
 
-    localStorage.setItem(
-        "players",
-        JSON.stringify(players)
-    );
-
-    alert("Registration Successful!");
-
+    document.getElementById("message").textContent =
+        "Registration Successful!";
     this.reset();
-
 });
 
-loadTournament();
+function loadTournament() {
+    const data = JSON.parse(localStorage.getItem("tournament") || "null");
 
+    if (data) {
+        document.getElementById("showName").textContent = data.name;
+        document.getElementById("showFee").textContent = data.fee;
+        document.getElementById("showPrize").textContent = data.prize;
+        document.getElementById("showDate").textContent = data.date;
+    }
+}
+
+loadTournament();
 </script>
 
 </body>
