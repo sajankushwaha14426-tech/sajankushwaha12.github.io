@@ -1,0 +1,158 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #080808;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+header {
+    background: #111;
+    padding: 25px;
+    border-bottom: 2px solid #ff3333;
+}
+
+header h1 {
+    color: #ff3333;
+    margin-bottom: 20px;
+    font-size: 32px;
+}
+
+nav a {
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    margin: 10px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #ff3333;
+}
+
+.hero {
+    padding: 110px 20px;
+    background: linear-gradient(135deg, #350000, #111, #080808);
+}
+
+.hero h2 {
+    color: #ff3333;
+    font-size: 38px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    margin-bottom: 30px;
+    font-size: 18px;
+}
+
+section {
+    padding: 70px 20px;
+}
+
+section h2 {
+    color: #ff3333;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: #181818;
+    border: 2px solid #ff3333;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 350px;
+    margin: 25px auto;
+    box-shadow: 0 0 15px #440000;
+}
+
+.card h3 {
+    color: #ff3333;
+    margin-bottom: 20px;
+}
+
+.card p {
+    margin: 12px;
+}
+
+.btn {
+    display: inline-block;
+    background: #ff3333;
+    color: white;
+    padding: 14px 25px;
+    text-decoration: none;
+    border-radius: 6px;
+    margin-top: 20px;
+    font-weight: bold;
+    border: none;
+}
+
+.btn:hover {
+    background: #cc0000;
+}
+
+.register-form {
+    max-width: 400px;
+    margin: auto;
+}
+
+.register-form input {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin: 15px 0;
+    background: #181818;
+    color: white;
+    border: 1px solid #ff3333;
+    border-radius: 6px;
+}
+
+.register-form button {
+    width: 100%;
+    padding: 15px;
+    background: #ff3333;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.register-form button:hover {
+    background: #cc0000;
+}
+
+#message {
+    color: #ff5555;
+    margin-top: 20px;
+}
+
+#contact {
+    background: #111;
+}
+
+footer {
+    background: #080808;
+    border-top: 2px solid #ff3333;
+    padding: 25px;
+    color: #aaa;
+}
+
+@media (max-width: 600px) {
+    nav a {
+        margin: 7px;
+        font-size: 13px;
+    }
+
+    .hero h2 {
+        font-size: 27px;
+    }
+}

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAIE LADUGA Admin Panel</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    background: #080808;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+}
+
+h1 {
+    color: #ff3030;
+    text-align: center;
+}
+
+h2 {
+    color: #ff3030;
+}
+
+.card {
+    background: #171717;
+    border: 1px solid #444;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+input, button {
+    width: 100%;
+    padding: 13px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: none;
+    font-size: 15px;
+}
+
+input {
+    background: #292929;
+    color: white;
+}
+
+button {
+    background: #e52222;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #b91515;
+}
+
+.stats {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.stat {
+    flex: 1;
+    min-width: 140px;
+    background: #252525;
+    border: 1px solid #ff3030;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+}
+
+.stat h3 {
+    color: #ff4545;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th, td {
+    border: 1px solid #555;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background: #292929;
+    color: #ff4545;
+}
+
+.hidden {
+    display: none;
+}
+
+.message {
+    color: #55ff88;
+}
+
+@media(max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 6px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>MAIE LADUGA</h1>
+<p style="text-align:center;">ADMIN CONTROL PANEL</p>
+
+<!-- LOGIN -->
+
+<div class="card" id="loginBox">
+
+<h2>ADMIN LOGIN</h2>
+
+<input type="password"
+id="password"
+placeholder="Enter Password">
+
+<button onclick="loginAdmin()">LOGIN</button>
+
+<p id="loginMessage"></p>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div id="dashboard" class="hidden">
+
+<!-- OVERVIEW -->
+
+<div class="card">
+
+<h2>DASHBOARD OVERVIEW</h2>
+
+<div class="stats">
+
+<div class="stat">
+<h3>Total Players</h3>
+<h2 id="playerCount">0</h2>
+</div>
+
+<div class="stat">
+<h3>Total Teams</h3>
+<h2 id="teamCount">0</h2>
+</div>
+
+</div>
+</div>
+
+<!-- PLAYERS -->
+
+<div class="card">
+
+<h2>PLAYER REGISTRATIONS</h2>
+
+<button onclick="showPlayers()">REFRESH PLAYERS</button>
+
+<div style="overflow-x:auto;">
+
+<table>
+
+<thead>
+<tr>
+<th>Name</th>
+<th>UID</th>
+<th>Team</th>
+<th>Members</th>
+</tr>
+</thead>
+
+<tbody id="playerTable"></tbody>
+
+</table>
+
+</div>
+</div>
+
+<!-- TOURNAMENT SETTINGS -->
+
+<div class="card">
+
+<h2>TOURNAMENT SETTINGS</h2>
+
+<label>Tournament Name</label>
+
+<input type="text"
+id="tournamentName"
+placeholder="Enter Tournament Name">
+
+<label>Entry Fee (₹)</label>
+
+<input type="number"
+id="entryFee"
+placeholder="Enter Entry Fee">
+
+<label>Prize Pool (₹)</label>
+
+<input type="number"
+id="prizePool"
+placeholder="Enter Prize Pool">
+
+<label>Tournament Date</label>
+
+<input type="date"
+id="tournamentDate">
+
+<button onclick="saveTournament()">
+SAVE TOURNAMENT
+</button>
+
+<p id="tournamentMessage" class="message"></p>
+
+</div>
+
+<!-- WINNER DETAILS -->
+
+<div class="card">
+
+<h2>WINNER DETAILS</h2>
+
+<input type="text"
+id="winnerName"
+placeholder="Winner Name">
+
+<input type="text"
+id="winnerTeam"
+placeholder="Winner Team">
+
+<button onclick="saveWinner()">
+SAVE WINNER
+</button>
+
+<p id="winnerMessage" class="message"></p>
+
+</div>
+
+<button onclick="logoutAdmin()">LOGOUT</button>
+
+</div>
+</div>
+
+<script>
+
+// ADMIN LOGIN - DEMO ONLY
+
+function loginAdmin() {
+
+    const password =
+    document.getElementById("password").value;
+
+    if(password === "MAIE123") {
+
+        document.getElementById("loginBox")
+        .classList.add("hidden");
+
+        document.getElementById("dashboard")
+        .classList.remove("hidden");
+
+        showPlayers();
+        loadTournament();
+        loadWinner();
+
+    } else {
+
+        document.getElementById("loginMessage")
+        .textContent = "Wrong Password!";
+
+    }
+}
+
+
+// PLAYER LIST
+
+function showPlayers() {
+
+    let players = [];
+
+    try {
+        players =
+        JSON.parse(localStorage.getItem("players")) || [];
+    } catch(error) {
+        players = [];
+    }
+
+    const table =
+    document.getElementById("playerTable");
+
+    table.innerHTML = "";
+
+    players.forEach(function(player) {
+
+        const row = document.createElement("tr");
+
+        [
+            player.name,
+            player.uid,
+            player.team,
+            player.members
+        ].forEach(function(value) {
+
+            const cell = document.createElement("td");
+
+            cell.textContent = value || "";
+
+            row.appendChild(cell);
+
+        });
+
+        table.appendChild(row);
+
+    });
+
+    document.getElementById("playerCount")
+    .textContent = players.length;
+
+    const teams = new Set(
+        players.map(p => p.team).filter(Boolean)
+    );
+
+    document.getElementById("teamCount")
+    .textContent = teams.size;
+
+}
+
+
+// SAVE TOURNAMENT
+
+function saveTournament() {
+
+    const tournament = {
+
+        name: document.getElementById("tournamentName").value,
+
+        fee: document.getElementById("entryFee").value,
+
+        prize: document.getElementById("prizePool").value,
+
+        date: document.getElementById("tournamentDate").value
+
+    };
+
+    localStorage.setItem(
+        "tournament",
+        JSON.stringify(tournament)
+    );
+
+    document.getElementById("tournamentMessage")
+    .textContent = "Tournament Saved Successfully!";
+
+}
+
+
+// LOAD TOURNAMENT
+
+function loadTournament() {
+
+    let tournament = null;
+
+    try {
+        tournament =
+        JSON.parse(localStorage.getItem("tournament"));
+    } catch(error) {
+        tournament = null;
+    }
+
+    if(!tournament) return;
+
+    document.getElementById("tournamentName").value =
+    tournament.name || "";
+
+    document.getElementById("entryFee").value =
+    tournament.fee || "";
+
+    document.getElementById("prizePool").value =
+    tournament.prize || "";
+
+    document.getElementById("tournamentDate").value =
+    tournament.date || "";
+
+}
+
+
+// SAVE WINNER
+
+function saveWinner() {
+
+    const winner = {
+
+        name: document.getElementById("winnerName").value,
+
+        team: document.getElementById("winnerTeam").value
+
+    };
+
+    localStorage.setItem(
+        "winner",
+        JSON.stringify(winner)
+    );
+
+    document.getElementById("winnerMessage")
+    .textContent = "Winner Saved Successfully!";
+
+}
+
+
+// LOAD WINNER
+
+function loadWinner() {
+
+    let winner = null;
+
+    try {
+        winner =
+        JSON.parse(localStorage.getItem("winner"));
+    } catch(error) {
+        winner = null;
+    }
+
+    if(!winner) return;
+
+    document.getElementById("winnerName").value =
+    winner.name || "";
+
+    document.getElementById("winnerTeam").value =
+    winner.team || "";
+
+}
+
+
+// LOGOUT
+
+function logoutAdmin() {
+    location.reload();
+}
+
+</script>
+
+</body>
+</html>

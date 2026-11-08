@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAIE LADUGA Gaming</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+.tournament-info {
+    background: #171717;
+    border: 1px solid #ff3030;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.tournament-info p {
+    margin: 14px 0;
+}
+
+.tournament-info strong {
+    color: #ff4545;
+}
+
+.tournament-info button {
+    background: #e52222;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>MAIE LADUGA</h1>
+    <p>THE ULTIMATE GAMING ZONE</p>
+
+    <nav>
+        <a href="#home">HOME</a>
+        <a href="#games">GAMES</a>
+        <a href="#tournaments">TOURNAMENTS</a>
+        <a href="#register">REGISTER</a>
+        <a href="#contact">CONTACT</a>
+    </nav>
+</header>
+
+<section id="home" class="hero">
+    <h2>WELCOME TO MAIE LADUGA</h2>
+    <p>Play. Compete. Become a Champion.</p>
+    <a href="#register" class="btn">JOIN TOURNAMENT</a>
+</section>
+
+<section id="games">
+    <h2>OUR GAMES</h2>
+
+    <div class="cards">
+        <div class="card">
+            <h3>FREE FIRE</h3>
+            <p>Battle Royale Gaming</p>
+        </div>
+
+        <div class="card">
+            <h3>BATTLEGROUNDS</h3>
+            <p>Survival Battle Gaming</p>
+        </div>
+    </div>
+</section>
+
+<section id="tournaments">
+    <h2>UPCOMING TOURNAMENT</h2>
+
+    <div class="tournament-info">
+
+        <h3 id="showName">Tournament Name</h3>
+
+        <p>Entry Fee:
+            <strong id="showFee">Not announced</strong>
+        </p>
+
+        <p>Prize Pool:
+            <strong id="showPrize">Not announced</strong>
+        </p>
+
+        <p>Date:
+            <strong id="showDate">Not announced</strong>
+        </p>
+
+        <button onclick="location.href='#register'">
+            REGISTER NOW
+        </button>
+
+    </div>
+</section>
+
+<section id="register">
+    <h2>PLAYER REGISTRATION</h2>
+
+    <form id="registrationForm">
+
+        <input type="text"
+        id="playerName"
+        placeholder="Player Name" required>
+
+        <input type="text"
+        id="playerUID"
+        placeholder="Free Fire UID" required>
+
+        <input type="text"
+        id="teamName"
+        placeholder="Team Name" required>
+
+        <input type="text"
+        id="squadMembers"
+        placeholder="Squad Members" required>
+
+        <button type="submit">REGISTER NOW</button>
+
+    </form>
+</section>
+
+<section id="contact">
+    <h2>CONTACT US</h2>
+    <p>MAIE LADUGA Gaming Community</p>
+</section>
+
+<footer>
+    <p>© 2026 MAIE LADUGA. All Rights Reserved.</p>
+</footer>
+
+<script>
+
+// LOAD TOURNAMENT DETAILS
+
+function loadTournament() {
+
+    let tournament = null;
+
+    try {
+        tournament = JSON.parse(
+            localStorage.getItem("tournament")
+        );
+    } catch(error) {
+        tournament = null;
+    }
+
+    if (!tournament) return;
+
+    document.getElementById("showName").textContent =
+        tournament.name || "Tournament";
+
+    document.getElementById("showFee").textContent =
+        tournament.fee ? "₹" + tournament.fee : "Not announced";
+
+    document.getElementById("showPrize").textContent =
+        tournament.prize ? "₹" + tournament.prize : "Not announced";
+
+    document.getElementById("showDate").textContent =
+        tournament.date || "Not announced";
+}
+
+
+// PLAYER REGISTRATION
+
+document.getElementById("registrationForm")
+.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const player = {
+        name: document.getElementById("playerName").value.trim(),
+        uid: document.getElementById("playerUID").value.trim(),
+        team: document.getElementById("teamName").value.trim(),
+        members: document.getElementById("squadMembers").value.trim()
+    };
+
+    let players = [];
+
+    try {
+        players = JSON.parse(
+            localStorage.getItem("players")
+        ) || [];
+    } catch(error) {
+        players = [];
+    }
+
+    players.push(player);
+
+    localStorage.setItem(
+        "players",
+        JSON.stringify(players)
+    );
+
+    alert("Registration Successful!");
+
+    this.reset();
+
+});
+
+loadTournament();
+
+</script>
+
+</body>
+</html>
